@@ -1,17 +1,19 @@
 <?php
+
 /**
  * @link      https://github.com/wbraganca/yii2-dynamicform
  * @copyright Copyright (c) 2014 Wanderson Bragança
  * @license   https://github.com/wbraganca/yii2-dynamicform/blob/master/LICENSE
  */
 
-namespace app\components;
+namespace dickyermawan\base;
 
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\base\InvalidConfigException;
 use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * yii2-dynamicform is widget to yii2 framework to clone form elements in a nested manner, maintaining accessibility.
  *
@@ -24,7 +26,7 @@ class KyDynamicForm extends \yii\base\Widget
      * @var string
      */
     public $widgetContainer;
-     /**
+    /**
      * @var string
      */
     public $widgetBody;
@@ -40,7 +42,7 @@ class KyDynamicForm extends \yii\base\Widget
      * @var string
      */
     public $insertButton;
-     /**
+    /**
      * @var string
      */
     public $deleteButton;
@@ -48,7 +50,7 @@ class KyDynamicForm extends \yii\base\Widget
      * @var string 'bottom' or 'top';
      */
     public $insertPosition = 'bottom';
-     /**
+    /**
      * @var Model|ActiveRecord the model used for the form
      */
     public $model;
@@ -106,7 +108,7 @@ class KyDynamicForm extends \yii\base\Widget
         if (empty($this->formId)) {
             throw new InvalidConfigException("The 'formId' property must be set.");
         }
-        if (empty($this->insertPosition) || ! in_array($this->insertPosition, $this->_insertPositions)) {
+        if (empty($this->insertPosition) || !in_array($this->insertPosition, $this->_insertPositions)) {
             throw new InvalidConfigException("Invalid configuration to property 'insertPosition' (allowed values: 'bottom' or 'top')");
         }
         if (empty($this->formFields) || !is_array($this->formFields)) {
@@ -133,7 +135,7 @@ class KyDynamicForm extends \yii\base\Widget
         $this->_options['fields']          = [];
 
         foreach ($this->formFields as $field) {
-             $this->_options['fields'][] = [
+            $this->_options['fields'][] = [
                 'id' => Html::getInputId($this->model, '[{}]' . $field),
                 'name' => Html::getInputName($this->model, '[{}]' . $field)
             ];
@@ -201,21 +203,21 @@ class KyDynamicForm extends \yii\base\Widget
         KyDynamicFormAsset::register($view);
 
         // add a click handler for the clone button
-        $js = 'jQuery("#' . $this->formId . '").on("click", "' . $this->insertButton . '", function(e) {'. "\n";
+        $js = 'jQuery("#' . $this->formId . '").on("click", "' . $this->insertButton . '", function(e) {' . "\n";
         $js .= "    e.preventDefault();\n";
         $js .= '    jQuery(".' .  $this->widgetContainer . '").triggerHandler("beforeInsert", [jQuery(this)]);' . "\n";
-        $js .= '    jQuery(".' .  $this->widgetContainer . '").yiiDynamicForm("addItem", '. $this->_hashVar . ", e, jQuery(this));\n";
+        $js .= '    jQuery(".' .  $this->widgetContainer . '").yiiDynamicForm("addItem", ' . $this->_hashVar . ", e, jQuery(this));\n";
         $js .= "});\n";
         $view->registerJs($js, $view::POS_READY);
 
         // add a click handler for the remove button
-        $js = 'jQuery("#' . $this->formId . '").on("click", "' . $this->deleteButton . '", function(e) {'. "\n";
+        $js = 'jQuery("#' . $this->formId . '").on("click", "' . $this->deleteButton . '", function(e) {' . "\n";
         $js .= "    e.preventDefault();\n";
-        $js .= '    jQuery(".' .  $this->widgetContainer . '").yiiDynamicForm("deleteItem", '. $this->_hashVar . ", e, jQuery(this));\n";
+        $js .= '    jQuery(".' .  $this->widgetContainer . '").yiiDynamicForm("deleteItem", ' . $this->_hashVar . ", e, jQuery(this));\n";
         $js .= "});\n";
         $view->registerJs($js, $view::POS_READY);
 
-        $js = 'jQuery("#' . $this->formId . '").yiiDynamicForm(' . $this->_hashVar .');' . "\n";
+        $js = 'jQuery("#' . $this->formId . '").yiiDynamicForm(' . $this->_hashVar . ');' . "\n";
         $view->registerJs($js, $view::POS_LOAD);
     }
 
